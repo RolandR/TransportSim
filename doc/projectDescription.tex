@@ -1,0 +1,142 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper]{article}
+
+\usepackage{lipsum} 
+
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\linespread{1.05} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+\usepackage{hyperref} % For hyperlinks in the PDF
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+\usepackage{float} % Required for tables and figures in the multi-column environment - they need to be placed in specific locations with the [H] (e.g. \begin{table}[H])
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+\usepackage{paralist} % Used for the compactitem environment which makes bullet points with less space between them
+%\usepackage{ngerman}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+
+
+\usepackage{abstract}
+\renewcommand{\abstractnamefont}{\normalfont\bfseries}
+\renewcommand{\abstracttextfont}{\normalfont\itshape}
+
+\usepackage{titlesec}
+\titleformat{\section}[block]{\large\scshape{\Roman{section}.}}{}{1.5em}{} % Change the look of the section titles 
+\titleformat{\subsection}[block]{\vspace{-2mm}{\Roman{section}.\scshape\roman{subsection}}}{}{1em}{} % Change the look of the subsection titles 
+
+\usepackage{lastpage}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhead[R]{
+	Roland \textsc{Rytz}
+}
+\fancyhead[L]{Java Project - BTI7051p}
+\fancyfoot[C]{ \thepage{} of \pageref{LastPage} }
+
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\newcommand{\superscript}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcommand{\subscript}[1]{\ensuremath{_{\textrm{#1}}}}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\title{
+	\vspace{-10mm}
+	\fontsize{18pt}{10pt}
+	\selectfont\textbf{
+		A transport simulation in Java
+	}\\[-4mm]
+}
+
+\author{
+	Roland \textsc{Rytz}
+}
+\date{Compiled on \today}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+%\newpage
+
+\thispagestyle{fancy} % All pages have headers and footers
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+%\begin{multicols}{2} % Two-column layout throughout the main article text
+
+\section{Project Goal}
+\lettrine[findent=0.25em,nindent=-0em,slope=0mm,lines=2]{T}{he} goal of my project is to make some sort of a transport simulation, where the player builds a network of transport routes that connect sources of passengers or freight. They will have to take various factors into account when designing this network. These could, for example, be scarcity of resources in a region, commuters preferring other means of transport or even terrain.\\
+\subsection{User Interface}
+The first version of the game will have no graphical user interface. (The crowd gasps!) Focus will be on developing the logic of the game world, its population and their demands, the freight market, the world's economy and how it all plays together. Only after that, an interface inspired by that of Dwarf Fortress\footnote{\url{http://www.bay12games.com/dwarves/}} will be implemented using the foundations that have been laid in the previous phase.
+
+\section{Risks}
+\lettrine[findent=0.25em,nindent=-0em,slope=0mm,lines=2]{T}{he} biggest risk in this project is that my ambitions could exceed the time and caffeine available. Therefore, it is important to get a very basic version running somewhat early and then building on that in modular pieces. Otherwise, I might end up with a lot of promising, but loose threads.
+
+\section{Project Schedule}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lll}
+\toprule
+Week & Day & Progress\\
+\toprule
+44 & Tuesday & Project description (this document)\\
+\midrule
+45 & Tuesday & \\
+45 & Friday &  First playable version\\
+\midrule
+48 & Tuesday & More game content\\
+48 & Friday & Work on GUI can start\\
+\midrule
+51 & Tuesday &  GUI: Menus and such\\
+51 & Friday &  Rendering of game world\\
+\midrule
+02 & Tuesday &  Building/Doing stuff in GUI\\
+02 & Friday &  Done!\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
