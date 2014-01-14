@@ -15,11 +15,13 @@ public class City{
 	private int companyCount;
 	private double averageSalary;
 	
-	private static int totalCityCount;
+	public static int totalCityCount;
 	
 	private ArrayList<House> houses = new ArrayList<House>();
 	
 	private ArrayList<Company> companies = new ArrayList<Company>();
+	
+	private ArrayList<Citizen> inhabitants = new ArrayList<Citizen>();
 	
 	private ArrayList<Connection> connections = new ArrayList<Connection>();
 	
@@ -112,6 +114,14 @@ public class City{
 		}
 	}
 	
+	public void addCitizen(Citizen citizen){
+		inhabitants.add(citizen);
+	}
+	
+	public ArrayList<Citizen> getInhabitants(){
+		return inhabitants;
+	}
+	
 	private Company createCompany(){
 		companies.add(new Company(this));
 		return companies.get(companies.size() - 1);
@@ -129,6 +139,14 @@ public class City{
 	
 	public int getHousingCapacity(){
 		return housingCapacity;
+	}
+	
+	public ArrayList<House> getHouses(){
+		return houses;
+	}
+	
+	public ArrayList<Company> getCompanies(){
+		return companies;
 	}
 	
 	public int getHouseCount(){

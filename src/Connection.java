@@ -12,7 +12,7 @@ public class Connection{
 	
 	private int id;
 	
-	private static int totalConnectionCount = 0;
+	public static int totalConnectionCount = 0;
 	
 	public Connection(City nEndpointA, City nEndpointB){
 		id = totalConnectionCount;
