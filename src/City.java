@@ -77,6 +77,10 @@ public class City{
 		}
 	}
 	
+	public ArrayList<Connection> getConnections(){
+		return connections;
+	}
+	
 	public Connection getConnectionTo(City otherCity){
 		for(int i = 0; i < connections.size(); i++){
 			Connection currentConnection = connections.get(i);
@@ -175,6 +179,15 @@ public class City{
 	
 	public int getYPos(){
 		return yPos;
+	}
+	
+	public static City getById(int id){
+		for(City city: allCities){
+			if(city.getId() == id){
+				return city;
+			}
+		}
+		return null;
 	}
 	
 	public static int getTotalCityCount(){

@@ -7,15 +7,18 @@ public class Company{
 	private int jobCount;
 	private double averageSalary;
 	
+	private int id;
+	
+	private static int totalCompanyCount;
+	
 	private ArrayList<Job> jobs = new ArrayList<Job>();
+	
+	public static ArrayList<Company> allCompanies = new ArrayList<Company>();
 	
 	public Company(City nCity){
 		city = nCity;
 		salaryModifier = (2+Math.random())/3;
 		jobCount = 1+(int)Math.round(Math.random()*30);
-		
-		//System.out.println();
-		//System.out.println("Salary Modifier: "+salaryModifier);
 		
 		double totalSalary = 0;
 		for(int i = 0; i < jobCount; i++){
@@ -23,6 +26,11 @@ public class Company{
 			totalSalary += createdJob.getSalary();
 		}
 		averageSalary = totalSalary / (double)jobCount;
+		
+		id = totalCompanyCount;
+		totalCompanyCount++;
+		
+		allCompanies.add(this);
 	}
 	
 	private Job createJob(){
@@ -42,7 +50,28 @@ public class Company{
 		return city;
 	}
 	
+	public int getId(){
+		return id;
+	}
+	
+	public ArrayList<Job> getJobs(){
+		return jobs;
+	}
+	
 	public double getAverageSalary(){
 		return averageSalary;
+	}
+	
+	public static int getTotalCompanyCount(){
+		return totalCompanyCount;
+	}
+	
+	public static Company getById(int id){
+		for(Company company: allCompanies){
+			if(company.getId() == id){
+				return company;
+			}
+		}
+		return null;
 	}
 }

@@ -48,10 +48,6 @@ public class Connection{
 		return (endpointA == toCheck || endpointB == toCheck);
 	}
 	
-	public static int getTotalConnectionCount(){
-		return totalConnectionCount;
-	}
-	
 	public City getOtherEndpoint(City firstEndpoint){
 		if(firstEndpoint == endpointA){
 			return endpointB;
@@ -72,5 +68,18 @@ public class Connection{
 	
 	public int getId(){
 		return id;
+	}
+	
+	public static int getTotalConnectionCount(){
+		return totalConnectionCount;
+	}
+	
+	public static Connection getById(int id){
+		for(Connection connection: allConnections){
+			if(connection.getId() == id){
+				return connection;
+			}
+		}
+		return null;
 	}
 }

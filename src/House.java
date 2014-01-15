@@ -38,6 +38,10 @@ public class House{
 		return rent;
 	}
 	
+	public int getHousingCapacity(){
+		return capacity;
+	}
+	
 	public ArrayList<Citizen> getTenants(){
 		return tenants;
 	}
@@ -50,7 +54,20 @@ public class House{
 		return tenants.size();
 	}
 	
+	public City getCity(){
+		return city;
+	}
+	
 	public static int getTotalHousingCapacity(){
 		return totalHousingCapacity;
+	}
+	
+	public static House getById(int id){
+		for(House house: allHouses){
+			if(house.getId() == id){
+				return house;
+			}
+		}
+		return null;
 	}
 }

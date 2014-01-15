@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Job{
 
@@ -6,16 +7,20 @@ public class Job{
 	private boolean isOccupied;
 	private Citizen employee;
 	private City city;
+	private int id;
 	
 	private static int totalJobCount;
 	
+	public ArrayList<Job> allJobs = new ArrayList<Job>();
+	
 	public Job(Company nCompany, double salaryModifier){
-		totalJobCount++;
 		company = nCompany;
 		city = company.getCity();
 		salary = (40+Math.random()*20)*salaryModifier;
 		
-		//System.out.println("\t"+salary);
+		id = totalJobCount;
+		totalJobCount++;
+		allJobs.add(this);
 	}
 	
 	public Citizen getEmployee(){
@@ -28,6 +33,10 @@ public class Job{
 	
 	public boolean getIsOccupied(){
 		return isOccupied;
+	}
+	
+	public int getId(){
+		return id;
 	}
 	
 	public static int getTotalJobCount(){

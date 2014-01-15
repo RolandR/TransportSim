@@ -10,7 +10,7 @@ public class Citizen{
 	
 	private int id;
 	
-	private static int totalCitizenCount = 0;
+	public static int totalCitizenCount = 0;
 	public static ArrayList<Citizen> allCitizens = new ArrayList<Citizen>();
 	
 	public Citizen(House nhouse, City ncity){
@@ -25,8 +25,36 @@ public class Citizen{
 		allCitizens.add(this);
 	}
 	
+	public int getId(){
+		return id;
+	}
+	
+	public House getHouse(){
+		return house;
+	}
+	
+	public City getCity(){
+		return city;
+	}
+	
+	public Job getJob(){
+		return job;
+	}
+	
+	public double getEducation(){
+		return education;
+	}
+	
+	public static Citizen getById(int id){
+		for(Citizen citizen: allCitizens){
+			if(citizen.getId() == id){
+				return citizen;
+			}
+		}
+		return null;
+	}
+	
 	public static int getTotalCitizenCount(){
 		return totalCitizenCount;
 	}
-	
 }
