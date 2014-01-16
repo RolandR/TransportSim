@@ -70,6 +70,10 @@ public class Connection{
 		return id;
 	}
 	
+	public static ArrayList<Connection> getAllConnections(){
+		return allConnections;
+	}
+	
 	public static int getTotalConnectionCount(){
 		return totalConnectionCount;
 	}

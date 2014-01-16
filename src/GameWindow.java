@@ -39,6 +39,10 @@ public class GameWindow extends JFrame {
 		return temp.getInsets();
 	}
 	
+	public void refresh(){
+		repaint();
+	}
+	
 	public class GameDisplay extends JComponent {
 		
 		public void paintComponent(Graphics g) {
@@ -56,9 +60,8 @@ public class GameWindow extends JFrame {
 			g2d.drawRect(xWindowPadding, yWindowPadding, mapWidth, mapHeight);
 			
 			// Draw Connections
-			for(int i = 0; i < Connection.allConnections.size(); i++){
-				Connection currentConnection = Connection.allConnections.get(i);
-				
+			for(Connection currentConnection: Connection.getAllConnections()){
+							
 				int startX = (int)(currentConnection.getEndpointA().getXPos() * worldScale) + xWorldPadding;
 				int startY = (int)(currentConnection.getEndpointA().getYPos() * worldScale) + yWorldPadding;
 				int endX = (int)(currentConnection.getEndpointB().getXPos() * worldScale) + xWorldPadding;
@@ -72,12 +75,53 @@ public class GameWindow extends JFrame {
 				g2d.drawLine(startX, startY, endX, endY);
 			}
 			
+			// Draw Citizens
+			for(Citizen currentCitizen: Citizen.getAllCitizens()){
+				if(currentCitizen.isCurrentlyTravelling() && currentCitizen.getConnectionUsed().getDistance() != 0){
+					double targetX = currentCitizen.getCurrentDestination().getXPos();
+					double targetY = currentCitizen.getCurrentDestination().getYPos();
+					double startX = currentCitizen.getCurrentPosition().getXPos();
+					double startY = currentCitizen.getCurrentPosition().getYPos();
+					
+					double travelProgress = (currentCitizen.getDistanceTravelled() / currentCitizen.getConnectionUsed().getDistance());
+					
+				//	if(currentCitizen.getId() == 0){
+				//		ConsoleHandler.print(travelProgress+"");
+				//	}
+					
+					double currentX = startX + (targetX - startX) * travelProgress;
+					double currentY = startY + (targetY - startY) * travelProgress;
+					
+					currentX *= worldScale;
+					currentY *= worldScale;
+					
+					currentX += xWorldPadding;
+					currentY += yWorldPadding;
+					
+					int dotRadius = 4;
+					if(currentCitizen.getCity() == currentCitizen.getCurrentDestination()){
+						g2d.setColor(Color.GREEN);
+					} else {
+						g2d.setColor(Color.WHITE);
+					}
+				
+					g2d.fillOval((int)currentX - dotRadius, (int)currentY - dotRadius, dotRadius * 2, dotRadius * 2);
+				
+					g2d.setColor(Color.BLACK);
+				
+					g2d.drawOval((int)currentX - dotRadius, (int)currentY - dotRadius, dotRadius * 2, dotRadius * 2);
+					
+				} else {
+					//Citizen sits in a city and doesn't need to be rendered.
+				}
+			}
+			
 			// Draw Cities
-			for(int i = 0; i < City.allCities.size(); i++){
-				int cityX = (int)(City.allCities.get(i).getXPos() * worldScale) + xWorldPadding;
-				int cityY = (int)(City.allCities.get(i).getYPos() * worldScale) + yWorldPadding;
+			for(City currentCity: City.getAllCities()){
+				int cityX = (int)(currentCity.getXPos() * worldScale) + xWorldPadding;
+				int cityY = (int)(currentCity.getYPos() * worldScale) + yWorldPadding;
 				int dotRadius = 5;
-				dotRadius += (int)(City.allCities.get(i).getHousingCapacity() * 0.1);
+				dotRadius += (int)(currentCity.getHousingCapacity() * 0.1);
 				
 				g2d.setColor(Color.BLACK);
 				
@@ -89,7 +133,7 @@ public class GameWindow extends JFrame {
 				
 				g2d.setColor(Color.WHITE);
 				
-				g.drawString(Integer.toString(City.allCities.get(i).getId()), cityX - 4, cityY + 5);
+				g.drawString(Integer.toString(currentCity.getId()), cityX - 4, cityY + 5);
 			}
 			
 			// Print Information
@@ -98,35 +142,45 @@ public class GameWindow extends JFrame {
 			int cityCount = City.getTotalCityCount();
 			int connectionCount = Connection.getTotalConnectionCount();
 			int citizenCount = Citizen.getTotalCitizenCount();
-		/*	double unemploymentRate = (double)(Math.round(
-					((
-						(double)housingCapacity - (double)jobCount
-					)/(double)housingCapacity
-				)*1000)/10
-			);*/
+			int unemployed = citizenCount - Job.getTotalEmployees();
+			int unemploymentRate = (int)(100 * unemployed / citizenCount);
+			double currentTime = World.getTime();
 			
-			int tabulatorWidth = 180;
+			int tabulatorWidth = 190;
 			int lineHeight = 18;
+			int spaceBetweenMapAndInfo = 50;
 			
 			g2d.setColor(Color.WHITE);
 			
 			g2d.setFont(new Font("Courier", Font.PLAIN, 15)); 
 			
-			g2d.drawString("City Count:", xWindowPadding, yWindowPadding + mapHeight + lineHeight * 1);
-			g2d.drawString(Integer.toString(cityCount), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight +  lineHeight * 1);
 			
-			g2d.drawString("Connection Count:", xWindowPadding, yWindowPadding + mapHeight +  lineHeight * 2);
-			g2d.drawString(Integer.toString(connectionCount), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight +  lineHeight * 2);
+			g2d.drawString("Time: "+Util.formatTime(currentTime), xWindowPadding, yWindowPadding + mapHeight + 20);
 			
-			g2d.drawString("Housing Capacity:", xWindowPadding, yWindowPadding + mapHeight +  lineHeight * 3);
-			g2d.drawString(Integer.toString(housingCapacity), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight +  lineHeight * 3);
 			
-			g2d.drawString("Job Count:", xWindowPadding, yWindowPadding + mapHeight +  lineHeight * 4);
-			g2d.drawString(Integer.toString(jobCount), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight +  lineHeight * 4);
+			g2d.drawString("City Count:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight + lineHeight * 1);
+			g2d.drawString(Integer.toString(cityCount), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 1);
 			
-			g2d.drawString("Population:", xWindowPadding, yWindowPadding + mapHeight +  lineHeight * 5);
-			g2d.drawString(Integer.toString(citizenCount), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight +  lineHeight * 5);
+			g2d.drawString("Connection Count:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 2);
+			g2d.drawString(Integer.toString(connectionCount), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 2);
 			
+			g2d.drawString("Housing Capacity:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 3);
+			g2d.drawString(Integer.toString(housingCapacity), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 3);
+			
+			g2d.drawString("Job Count:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 4);
+			g2d.drawString(Integer.toString(jobCount), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 4);
+			
+			g2d.drawString("Population:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 5);
+			g2d.drawString(Integer.toString(citizenCount), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 5);
+			
+			g2d.drawString("Unemployed:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 6);
+			g2d.drawString(Integer.toString(unemployed), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 6);
+			
+			g2d.drawString("Unemployment Rate:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 7);
+			g2d.drawString(Integer.toString(unemploymentRate) + "%", xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 7);
+			
+			g2d.drawString("Citizens travelling:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 8);
+			g2d.drawString(Integer.toString(Citizen.getCurrentlyTravellingCount()), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 8);
 			
 		}
 	}

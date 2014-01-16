@@ -27,18 +27,18 @@ public class ConsoleHandler extends Thread{
 		print("├────────┴────────┴─────────────────────────────────────────────────────────┤");
 		print("│   Params: <c[o]nnection, c[i]ty, citize[n], [h]ouse, compan[y]> <ID>      │");
 		print("├────────┬────────┬─────────────────────────────────────────────────────────┤");
-		print("│list    │ l      │ Lists items of a type                                   │");
+		print("│list    │ l      │ Lists all items of a type                               │");
 		print("├────────┴────────┴─────────────────────────────────────────────────────────┤");
 		print("│   Params: <c[o]nnections, c[i]ties, citize[n]s, [h]ouses, companies [y]>  │");
 		print("└───────────────────────────────────────────────────────────────────────────┘");
 		
 	}
 	
-	public void print(String outString){
+	public static void print(String outString){
 		System.out.println(outString);
 	}
 	
-	public void print(){
+	public static void print(){
 		System.out.println();
 	}
 	
@@ -165,6 +165,8 @@ public class ConsoleHandler extends Thread{
 									Job citizensJob = examinedCitizen.getJob();
 									if(citizensJob != null){
 										print("  Has job "+citizensJob.getId());
+										print("  Works in city "+citizensJob.getCity().getId());
+										print("  Salary: "+Util.formatMoney(citizensJob.getSalary()));
 									} else {
 										print("  Is currently unemployed.");
 									}

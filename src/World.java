@@ -5,6 +5,7 @@ public class World{
 	private int cityCount;
 	private int width;
 	private int height;
+	private static double time;
 	
 	private boolean verbose = false;
 	
@@ -89,10 +90,12 @@ public class World{
 		return height;
 	}
 	
-	public void printInfo(){
-		
-		
-		
+	public static double getTime(){
+		return time;
+	}
+	
+	public static void setTime(double nTime){
+		time = nTime;
 	}
 	
 	// A wild hack appears!

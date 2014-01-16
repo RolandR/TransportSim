@@ -37,14 +37,6 @@ public class City{
 		yPos = y;
 		housingCapacity = 0;
 		
-		houseCount = 2 + (int)Math.round(Math.random()*10);
-		double totalRent = 0;
-		for(int i = 0; i < houseCount; i++){
-			House createdHouse = createHouse();
-			totalRent += createdHouse.getRent();
-		}
-		averageRent = totalRent/(double)houseCount;
-		
 		companyCount = 2 + (int)Math.round(Math.random()*10);
 		double totalSalary = 0;
 		for(int i = 0; i < companyCount; i++){
@@ -53,11 +45,22 @@ public class City{
 			totalSalary += createdCompany.getAverageSalary() * createdCompany.getJobCount();
 		}
 		averageSalary = totalSalary / jobCount;	
+		
+		houseCount = 2 + (int)Math.round(Math.random()*10);
+		double totalRent = 0;
+		for(int i = 0; i < houseCount; i++){
+			House createdHouse = createHouse();
+			totalRent += createdHouse.getRent();
+		}
+		averageRent = totalRent/(double)houseCount;
+		
 		allCities.add(this);	
 		
 		for(int i = 0; i < allCities.size(); i++){
 			this.connectTo(allCities.get(i));
 		}
+		
+		Citizen.init();
 	}
 	
 	public int getId(){
@@ -179,6 +182,10 @@ public class City{
 	
 	public int getYPos(){
 		return yPos;
+	}
+	
+	public static ArrayList<City> getAllCities(){
+		return allCities;
 	}
 	
 	public static City getById(int id){
