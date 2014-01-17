@@ -30,6 +30,14 @@ public class ConsoleHandler extends Thread{
 		print("│list    │ l      │ Lists all items of a type                               │");
 		print("├────────┴────────┴─────────────────────────────────────────────────────────┤");
 		print("│   Params: <c[o]nnections, c[i]ties, citize[n]s, [h]ouses, companies [y]>  │");
+		print("├────────┬────────┬─────────────────────────────────────────────────────────┤");
+		print("│buy     │ b      │ Buy something                                           │");
+		print("├────────┴────────┴─────────────────────────────────────────────────────────┤");
+		print("│   Params: <c[o]nnection> <ID>                                             │");
+		print("├────────┬────────┬─────────────────────────────────────────────────────────┤");
+		print("│upgrade │ u      │ Upgrade something                                       │");
+		print("├────────┴────────┴─────────────────────────────────────────────────────────┤");
+		print("│   Params: <c[o]nnection> <ID>                                             │");
 		print("└───────────────────────────────────────────────────────────────────────────┘");
 		
 	}
@@ -329,6 +337,256 @@ public class ConsoleHandler extends Thread{
 							break;
 							default:
 								print("Undefined item: "+listType);
+							break;
+						}
+					break;
+					
+					case "buy":
+					case "b":
+						String buyType;
+						int buyId = 0;
+						
+						try{
+							buyType = userInput[1];
+						} catch (java.lang.ArrayIndexOutOfBoundsException e){
+							do{
+								print("Please enter one of the following types:");
+								print("c[o]nnection");
+								System.out.print(">");
+								buyType = bufferedReader.readLine().split(" ")[0]; // TODO: Check if string is empty/whitespace first
+							} while(buyType == null || buyType.equals(""));
+						}
+						
+						
+						boolean buyIdIsValid = false;
+						
+						try{
+							buyId = Integer.parseInt(userInput[2]);
+							buyIdIsValid = true;
+						} catch (java.lang.ArrayIndexOutOfBoundsException e){
+							buyIdIsValid = false;
+						} catch (java.lang.NumberFormatException e){
+							buyIdIsValid = false;
+						}
+						
+						while(!buyIdIsValid){							
+							try{
+								print("Please enter a valid ID.");
+								System.out.print(">");
+								buyId = Integer.parseInt(bufferedReader.readLine());
+								buyIdIsValid = true;
+							} catch (java.lang.NumberFormatException e){
+								buyIdIsValid = false;
+							}
+						}
+						
+						switch(buyType){
+							case "connection":
+							case "o":
+								Connection connectionToBuy = Connection.getById(buyId);
+								if(connectionToBuy == null){
+									print("Could not find connection "+ buyId +".");
+								} else {
+									int success = TransportSim.getPlayer().checkBuyingConnection(connectionToBuy);
+									switch(success){
+										case 0:			
+											print("Buying connection "
+												+connectionToBuy.getId()+" would cost you CHF "
+												+Util.formatMoney(connectionToBuy.getPrice())+". Do you want to proceed? (y/n)");
+												
+											System.out.print(">");
+											
+											String confirmPurchase = bufferedReader.readLine();
+											confirmPurchase = confirmPurchase.trim();
+											
+											while(!confirmPurchase.equals("y") && !confirmPurchase.equals("n")){
+												print("Please enter \"y\" or \"n\".");
+												System.out.print(">");
+												confirmPurchase = bufferedReader.readLine();
+												confirmPurchase = confirmPurchase.trim();
+											}
+											
+											if(confirmPurchase.equals("y")){
+												TransportSim.getPlayer().buyConnection(connectionToBuy);
+												print("Connection "+connectionToBuy.getId()+" is now yours!");
+											} else {
+												print("Cancelled.");
+											}
+										break;
+										case 1:
+											print("You own connection "+connectionToBuy.getId()+" already.");
+										break;
+										case 2:
+											print("You can't afford to buy connection "+connectionToBuy.getId()+".");
+										break;
+										default:
+										break;
+									}
+								}
+							break;
+							
+							case "city":
+							case "i":
+							case "house":
+							case "h":
+							case "company":
+							case "y":
+								print("You can not buy this item: "+buyType);
+							break;
+							
+							case "citizen":
+							case "n":
+								print("You want to buy a citizen? Do I look like a slave trader?");
+							break;
+							
+							default:
+								print("Undefined item: "+buyType);
+							break;
+						}
+					break;
+					
+					case "upgrade":
+					case "u":
+						String upgradeType;
+						int upgradeId = 0;
+						
+						try{
+							upgradeType = userInput[1];
+						} catch (java.lang.ArrayIndexOutOfBoundsException e){
+							do{
+								print("Please enter one of the following types:");
+								print("c[o]nnection");
+								System.out.print(">");
+								upgradeType = bufferedReader.readLine().split(" ")[0]; // TODO: Check if string is empty/whitespace first
+							} while(upgradeType == null || upgradeType.equals(""));
+						}
+						
+						
+						boolean upgradeIdIsValid = false;
+						
+						try{
+							upgradeId = Integer.parseInt(userInput[2]);
+							upgradeIdIsValid = true;
+						} catch (java.lang.ArrayIndexOutOfBoundsException e){
+							upgradeIdIsValid = false;
+						} catch (java.lang.NumberFormatException e){
+							upgradeIdIsValid = false;
+						}
+						
+						while(!upgradeIdIsValid){							
+							try{
+								print("Please enter a valid ID.");
+								System.out.print(">");
+								upgradeId = Integer.parseInt(bufferedReader.readLine());
+								upgradeIdIsValid = true;
+							} catch (java.lang.NumberFormatException e){
+								upgradeIdIsValid = false;
+							}
+						}
+						
+						switch(upgradeType){
+							case "connection":
+							case "o":
+								Connection connectionToUpgrade = Connection.getById(upgradeId);
+								if(connectionToUpgrade == null){
+									print("Could not find connection "+ upgradeId +".");
+								} else {
+									print("The connection currently has a speed of "+Math.round(connectionToUpgrade.getSpeed()*100)/100.0+".");
+									print("What speed would you like to upgrade it to?");
+									
+									System.out.print(">");
+									
+									String upgradeSpeedInput = bufferedReader.readLine();
+									upgradeSpeedInput = upgradeSpeedInput.trim();
+									
+									boolean upgradeSpeedIsValid = false;
+									double upgradeSpeed = 0.0;
+									
+									try{
+										upgradeSpeed = Double.parseDouble(upgradeSpeedInput);
+										if(upgradeSpeed > 0 && upgradeSpeed <= 1){
+											upgradeSpeedIsValid = true;
+										} else {
+											upgradeSpeedIsValid = false;
+										}
+									} catch (java.lang.NumberFormatException e){
+										upgradeSpeedIsValid = false;
+									}
+									
+									while(!upgradeSpeedIsValid){
+										print("Please enter a number larger than 0, maximum 1.");
+										System.out.print(">");
+										upgradeSpeedInput = bufferedReader.readLine();
+										upgradeSpeedInput = upgradeSpeedInput.trim();
+										
+										try{
+											upgradeSpeed = Double.parseDouble(upgradeSpeedInput);
+											if(upgradeSpeed > 0 && upgradeSpeed <= 1){
+												upgradeSpeedIsValid = true;
+											} else {
+												upgradeSpeedIsValid = false;
+											}
+										} catch (java.lang.NumberFormatException e){
+											upgradeSpeedIsValid = false;
+										}
+									}
+									
+									int success = TransportSim.getPlayer().checkUpgradingConnection(connectionToUpgrade, upgradeSpeed);
+									double upgradeCost = connectionToUpgrade.getUpgradeCost(upgradeSpeed);
+									switch(success){
+										case 0:
+											if(upgradeCost >= 0){
+												print("Upgrading connection "
+													+connectionToUpgrade.getId()+" to a speed of "+upgradeSpeed+" would cost you CHF "
+													+Util.formatMoney(upgradeCost)+".");
+											} else {
+												print("Connection "+connectionToUpgrade.getId()+" is currently faster than "+upgradeSpeed+".");
+												print("Downgrading it would give you CHF "+Util.formatMoney(Math.abs(upgradeCost))+".");
+											}
+											print("Do you want to proceed? (y/n)");
+												
+											System.out.print(">");
+											
+											String confirmUpgrade = bufferedReader.readLine();
+											confirmUpgrade = confirmUpgrade.trim();
+											
+											while(!confirmUpgrade.equals("y") && !confirmUpgrade.equals("n")){
+												print("Please enter \"y\" or \"n\".");
+												System.out.print(">");
+												confirmUpgrade = bufferedReader.readLine();
+												confirmUpgrade = confirmUpgrade.trim();
+											}
+											
+											if(confirmUpgrade.equals("y")){
+												TransportSim.getPlayer().upgradeConnection(connectionToUpgrade, upgradeSpeed);
+												print("Successfully upgraded connection "+connectionToUpgrade.getId()+" to speed "+upgradeSpeed);
+											} else {
+												print("Cancelled.");
+											}
+										break;
+										case 2:
+											print("You can't afford to upgrade connection "+connectionToUpgrade.getId()+"to a speed of "+upgradeSpeed+".");
+										break;
+										default:
+										break;
+									}
+									
+								}
+							break;
+							
+							case "city":
+							case "i":
+							case "house":
+							case "h":
+							case "company":
+							case "y":
+							case "citizen":
+							case "n":
+								print("You can not buy this item: "+upgradeType);
+							break;
+							
+							default:
+								print("Undefined item: "+upgradeType);
 							break;
 						}
 					break;

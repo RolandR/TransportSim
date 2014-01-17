@@ -21,4 +21,8 @@ public class TransportSim{
 	public static double getGameDayPerSecond(){
 		return gameDayPerSecond;
 	}
+	
+	public static Player getPlayer(){
+		return player;
+	}
 }

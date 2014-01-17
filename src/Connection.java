@@ -8,6 +8,8 @@ public class Connection{
 	private double speed;
 	private double cost;
 	
+	private Player owner;
+	
 	public static ArrayList<Connection> allConnections = new ArrayList<Connection>();
 	
 	private int id;
@@ -30,6 +32,26 @@ public class Connection{
 		cost = distance/speed;
 		
 		allConnections.add(this);
+	}
+	
+	public void changeOwner(Player newOwner){
+		owner = newOwner;
+	}
+	
+	public Player getOwner(){
+		return owner;
+	}
+	
+	public double getPrice(){
+		return distance * speed * 2 + 100;
+	}
+	
+	public double getUpgradeCost(double upgradeSpeed){
+		return (upgradeSpeed - speed) * 300.0;
+	}
+	
+	public void upgradeSpeed(double newSpeed){
+		speed = newSpeed;
 	}
 	
 	public double getDistance(){

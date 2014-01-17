@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Color;
+import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.RenderingHints;
 import java.awt.Insets;
@@ -70,9 +71,27 @@ public class GameWindow extends JFrame {
 				int colYellow = 255 - (int)((currentConnection.getSpeed() - 0.25)*2 * 255);
 				int colBlue = (int)((currentConnection.getSpeed() - 0.25)*2 * 255);
 				
+				if(colYellow > 255){
+					colYellow = 255;
+				} else if(colYellow < 0){
+					colYellow = 0;
+				}
+				
+				if(colBlue > 255){
+					colBlue = 255;
+				} else if(colBlue < 0){
+					colBlue = 0;
+				}
+				
+				
 				g2d.setColor(new Color(colYellow, colYellow, colBlue));
 				
+				if(currentConnection.getOwner() == TransportSim.getPlayer()){
+					g2d.setStroke(new BasicStroke(3));
+				}
+				
 				g2d.drawLine(startX, startY, endX, endY);
+				g2d.setStroke(new BasicStroke(1));
 			}
 			
 			// Draw Citizens
@@ -181,6 +200,12 @@ public class GameWindow extends JFrame {
 			
 			g2d.drawString("Citizens travelling:", xWindowPadding, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 8);
 			g2d.drawString(Integer.toString(Citizen.getCurrentlyTravellingCount()), xWindowPadding + tabulatorWidth, yWindowPadding + mapHeight + spaceBetweenMapAndInfo + lineHeight * 8);
+			
+			
+			g2d.drawString("Balance: CHF "+Util.formatMoney(TransportSim.getPlayer().getBalance()), xWindowPadding + tabulatorWidth + 150
+				, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight);
+			g2d.drawString("Owned connections: "+TransportSim.getPlayer().getOwnedConnectionsCount(), xWindowPadding + tabulatorWidth + 150
+				, yWindowPadding + spaceBetweenMapAndInfo + mapHeight +  lineHeight * 2);
 			
 		}
 	}

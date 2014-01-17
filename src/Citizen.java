@@ -84,6 +84,10 @@ public class Citizen{
 		if(currentlyTravelling){
 			distanceTravelled += connectionUsed.getSpeed() * TransportSim.getGameDayPerSecond()*10;
 			if(distanceTravelled > connectionUsed.getDistance()){
+				Player connectionOwner = connectionUsed.getOwner();
+				if(connectionOwner != null){
+					connectionOwner.getPaid(connectionUsed.getDistance()*0.1 + connectionUsed.getSpeed()*5);
+				}
 				currentlyTravelling = false;
 				currentPosition = currentDestination;
 				connectionUsed = null;
